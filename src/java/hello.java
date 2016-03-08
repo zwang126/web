@@ -37,10 +37,14 @@ public class hello extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
+            if(request.getParameter("info") != null){
+                out.println("<h1>wrong action</h1><br>");
+            }
             out.println("<title>login place</title>");            
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>login place</h1>");
+            
             out.println("<form action = login_action method = post>");
             out.println("username:<input type = text name = username><br>");
             out.println("password:<input type = password name = password ><br>");

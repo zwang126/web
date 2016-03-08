@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -32,20 +33,28 @@ public class welcome extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        HttpSession hs = request.getSession(true);
+        String username = (String) hs.getAttribute("username");
+        if(username == null || username.equals("")){
+            
+            response.sendRedirect("hello?info=error1");
+        }else{
         try {
             /* TODO output your page here. You may use following sample code. */
+            String username1 = request.getParameter("username");
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
             out.println("<title>Servlet welcome</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>welcome zan to this page</h1>");
+            out.println("<h1>welcome "+username+" to this page</h1>");
             out.println("</body>");
             out.println("</html>");
         } finally {
             out.close();
         }
+    }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

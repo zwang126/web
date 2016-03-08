@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -36,8 +37,11 @@ public class login_action extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             String username = request.getParameter("username");
             String password  = request.getParameter("password");
-            if(username.equals("wz")&&password.equals("123")){
-                response.sendRedirect("welcome");
+            if((username.equals("wz")&&password.equals("123")) || (username.equals("aaa")&&password.equals("123")) ){
+                HttpSession hs = request.getSession(true);
+                hs.setMaxInactiveInterval(30);
+                hs.setAttribute("username", username);
+                response.sendRedirect("welcome?username="+username);
             }else{
                 response.sendRedirect("hello");
             }
