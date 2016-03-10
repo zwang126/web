@@ -6,6 +6,13 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,24 +34,34 @@ public class hello extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     *
      */
+    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        Connection conn = null;
+        Statement st = null;
+        ResultSet rs = null;
         PrintWriter out = response.getWriter();
+
         try {
+            response.setContentType("text/html;charset=UTF-8");
+            
+
             /* TODO output your page here. You may use following sample code. */
+           
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            if(request.getParameter("info") != null){
+            if (request.getParameter("info") != null) {
                 out.println("<h1>wrong action</h1><br>");
             }
-            out.println("<title>login place</title>");            
+            out.println("<title>login place</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>login place</h1>");
-            
+
             out.println("<form action = login_action method = post>");
             out.println("username:<input type = text name = username><br>");
             out.println("password:<input type = password name = password ><br>");
@@ -52,14 +69,15 @@ public class hello extends HttpServlet {
             out.println("</form>");
             out.println("</body>");
             out.println("</html>");
-        }catch(Exception ex ){
-            ex.printStackTrace();
-        }finally {
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        } finally {
             out.close();
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
