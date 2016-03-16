@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 
+import com.web1.userBeanAction;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -27,10 +28,6 @@ import javax.servlet.http.HttpSession;
 @WebServlet(urlPatterns = {"/login_action"})
 public class login_action extends HttpServlet {
 
-    private static final String user_name = "root";
-    private static final String pass_word = "1111";
-    private static final String CONN_STRING = "jdbc:mysql://localhost:3306/user";
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -43,39 +40,29 @@ public class login_action extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException {
         response.setContentType("text/html;charset=UTF-8");
-        Connection conn = null;
-        Statement st = null;
-        ResultSet rs = null;
 
         PrintWriter out = response.getWriter();
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection(CONN_STRING, user_name, pass_word);
-            /* TODO output your page here. You may use following sample code. */
+
             String username = request.getParameter("username");
             String password = request.getParameter("password");
-            st = conn.createStatement();
-            rs = st.executeQuery("SELECT password FROM users WHERE username = '"+username+"' LIMIT 1");
-            
-            
 
-            if (rs.next()) {
-                String db_pass = rs.getString(1);
-                if (db_pass.equals(password)) {
-                    HttpSession hs = request.getSession(true);
-                    hs.setMaxInactiveInterval(30);
-                    hs.setAttribute("username", username);
-                    response.sendRedirect("welcome?username=" + username);
-                } else {
-                    response.sendRedirect("hello");
-                }
-            }else{
+            userBeanAction ub = new userBeanAction();
+            boolean res = ub.verify_user(username, password);
+
+            if (res) {
+
+                HttpSession hs = request.getSession(true);
+                hs.setMaxInactiveInterval(30);
+                hs.setAttribute("username", username);
+                response.sendRedirect("welcome?username=" + username);
+
+            } else {
                 response.sendRedirect("hello");
             }
 
-        } catch (SQLException ex) {
-            ex.printStackTrace();;
-            Logger.getLogger(login_action.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         } finally {
             out.close();
         }
